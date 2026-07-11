@@ -5,6 +5,8 @@ import com.example.supportdesk.dto.CreateTicketRequest;
 import com.example.supportdesk.dto.TicketResponse;
 import com.example.supportdesk.model.Ticket;
 import com.example.supportdesk.repository.TicketRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -68,6 +70,12 @@ public class TicketService {
 
         Ticket savedTicket = ticketRepository.save(ticket);
         return toResponse(savedTicket);
+    }
+
+    // Return a paged and sorted list of tickets
+    public Page<TicketResponse> getPagedTickets(Pageable pageable) {
+        return ticketRepository.findAll(pageable)
+                .map(this::toResponse);
     }
 
     // Helper to convert Ticket model to TicketResponse DTO

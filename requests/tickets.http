@@ -44,6 +44,26 @@ GET http://localhost:8080/api/tickets?category=Feature%20Request
 GET http://localhost:8080/api/tickets?category=Documentation
 
 ### ========================================
+### GET - Paged tickets (default: page 0, size 5, sortBy createdAt, desc)
+### ========================================
+GET http://localhost:8080/api/tickets/paged?page=0&size=5
+
+### ========================================
+### GET - Paged tickets with custom sort (sortBy createdAt, direction desc)
+### ========================================
+GET http://localhost:8080/api/tickets/paged?page=0&size=5&sortBy=createdAt&direction=desc
+
+### ========================================
+### GET - Paged tickets - second page
+### ========================================
+GET http://localhost:8080/api/tickets/paged?page=1&size=5&sortBy=createdAt&direction=desc
+
+### ========================================
+### GET - Paged tickets sorted by priority ascending
+### ========================================
+GET http://localhost:8080/api/tickets/paged?page=0&size=3&sortBy=priority&direction=asc
+
+### ========================================
 ### GET - One ticket by ID (replace with real ID from GET /api/tickets above)
 ### ========================================
 GET http://localhost:8080/api/tickets/REPLACE_WITH_REAL_ID

@@ -4,6 +4,10 @@ import com.example.supportdesk.dto.CreateTicketRequest;
 import com.example.supportdesk.dto.TicketResponse;
 import com.example.supportdesk.service.TicketService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +30,20 @@ public class TicketController {
             @RequestParam(required = false) String priority,
             @RequestParam(required = false) String category) {
         return ticketService.getFilteredTickets(status, priority, category);
+    }
+
+    // GET /api/tickets/paged -> returns a page of tickets with sorting
+    @GetMapping("/paged")
+    public Page<TicketResponse> getPagedTickets(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "createdAt") String sortBy,
+            @RequestParam(defaultValue = "desc") String direction) {
+        Sort sort = direction.equalsIgnoreCase("desc")
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return ticketService.getPagedTickets(pageable);
     }
 
     // GET /api/tickets/{id} -> returns a single ticket by id
