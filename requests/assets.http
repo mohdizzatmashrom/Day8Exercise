@@ -1,0 +1,59 @@
+### Health check
+GET http://localhost:8080/api/health
+
+
+### Get all assets from MongoDB
+GET http://localhost:8080/api/assets
+
+
+### Get one asset
+# Replace the ID below with an actual ID returned by GET /api/assets
+GET http://localhost:8080/api/assets/REPLACE_WITH_REAL_ID
+
+
+### Get missing asset
+GET http://localhost:8080/api/assets/000000000000000000000000
+
+### Filter assets by status
+GET http://localhost:8080/api/assets?status=AVAILABLE
+
+#### Filter assets by category
+GET http://localhost:8080/api/assets?category=Phone
+
+### Filter assets by location
+GET http://localhost:8080/api/assets?location=HQ%20Level%67
+
+### Get paged assets
+GET http://localhost:8080/api/assets/paged?page=0&size=5
+
+### Get paged assets sorted by name in descending order
+GET http://localhost:8080/api/assets/paged?page=0&size=5&sortBy=name&direction=desc
+
+### Get paged assets sorted by category in ascending order
+GET http://localhost:8080/api/assets/paged?page=0&size=5&sortBy=category&direction=asc
+
+
+### Create a valid asset
+POST http://localhost:8080/api/assets
+Content-Type: application/json
+
+{
+  "assetTag": "TAB-2026-001",
+  "name": "Samsung Galaxy Tab",
+  "category": "Tablet",
+  "serialNumber": "SN-TAB-001",
+  "location": "HQ Level 4"
+}
+
+
+### Create an invalid asset
+POST http://localhost:8080/api/assets
+Content-Type: application/json
+
+{
+  "assetTag": "",
+  "name": "",
+  "category": "",
+  "serialNumber": "",
+  "location": ""
+}
