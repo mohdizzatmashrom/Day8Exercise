@@ -5,6 +5,8 @@ import com.example.supportdesk.dto.CreateTicketRequest;
 import com.example.supportdesk.dto.TicketResponse;
 import com.example.supportdesk.model.Ticket;
 import com.example.supportdesk.repository.TicketRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,8 @@ import java.util.List;
 
 @Service
 public class TicketService {
+
+    private static final Logger logger = LoggerFactory.getLogger(TicketService.class);
 
     private final TicketRepository ticketRepository;
 
@@ -32,6 +36,7 @@ public class TicketService {
     // Filter tickets by status, priority, or category (only one filter at a time)
     // If all params are null, returns all tickets
     public List<TicketResponse> getFilteredTickets(String status, String priority, String category) {
+        logger.info("Fetching tickets with filters - status: {}, priority: {}, category: {}", status, priority, category);
         List<Ticket> tickets;
 
         if (status != null) {
@@ -69,11 +74,13 @@ public class TicketService {
         ticket.setCreatedAt(LocalDateTime.now());
 
         Ticket savedTicket = ticketRepository.save(ticket);
+        logger.info("Created ticket with id: '{}', title: '{}'", savedTicket.getId(), savedTicket.getTitle());
         return toResponse(savedTicket);
     }
 
     // Return a paged and sorted list of tickets
     public Page<TicketResponse> getPagedTickets(Pageable pageable) {
+        logger.info("Fetching paginated tickets - page: {}, size: {}, sort: {}", pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort());
         return ticketRepository.findAll(pageable)
                 .map(this::toResponse);
     }

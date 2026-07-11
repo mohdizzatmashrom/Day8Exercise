@@ -3,9 +3,11 @@ package com.example.assettracker.service;
 import com.example.assettracker.dto.AssetResponse;
 import com.example.assettracker.dto.CreateAssetRequest;
 import com.example.assettracker.exception.ResourceNotFoundException;
+import com.example.assettracker.exception.DuplicateResourceException;
 import com.example.assettracker.model.Asset;
 import com.example.assettracker.repository.AssetRepository;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,24 +19,24 @@ import java.util.List;
 /*
  * AssetService
  * ------------
- * Services contain business logic. They are simple POJOs annotated with
- * @Service so Spring will detect and manage them (as beans) during startup.
- *
- * This example uses an in-memory list to keep the example simple for students.
- * In production you would typically talk to a database via a Repository.
+ * Services contain business logic. This Day 8 version uses AssetRepository
+ * to query MongoDB documents, add filtering, add pagination/sorting, and log
+ * important service operations.
  */
 @Service
 public class AssetService {
+
+    private static final Logger logger = LoggerFactory.getLogger(AssetService.class);
 
     private final AssetRepository assetRepository;
 
     public AssetService(AssetRepository assetRepository) {
         this.assetRepository = assetRepository;
-
     }
 
-    // Return all assets. Demos simple mapping from model -> response DTO.
     public List<AssetResponse> getAssets(String status, String category, String location) {
+        logger.info("Fetching assets with status={}, category={}, location={}", status, category, location);
+
         List<Asset> assets;
 
         if (hasValue(status)) {
@@ -42,23 +44,23 @@ public class AssetService {
         } else if (hasValue(category)) {
             assets = assetRepository.findByCategoryIgnoreCase(category.trim());
         } else if (hasValue(location)) {
-            assets = assetRepository.findByLocationContainsIgnoreCase(location.trim());
+            assets = assetRepository.findByLocationContainingIgnoreCase(location.trim());
         } else {
             assets = assetRepository.findAll();
         }
+
+        logger.info("Found {} asset(s)", assets.size());
+
         return assets.stream()
                 .map(this::toResponse)
                 .toList();
     }
 
     public Page<AssetResponse> getAssetsPaged(int page, int size, String sortBy, String direction) {
-        // Implement pagination logic here using the repository
-        // For example, you can use Spring Data's Pageable and PageRequest
-        // to fetch a page of assets from the database.
-        // This is a placeholder implementation.
+        logger.info("Fetching paged assets page={}, size={}, sortBy={}, direction={}", page, size, sortBy, direction);
 
-        Sort sort = direction.equalsIgnoreCase("desc") 
-                ? Sort.by(sortBy).descending() 
+        Sort sort = direction.equalsIgnoreCase("desc")
+                ? Sort.by(sortBy).descending()
                 : Sort.by(sortBy).ascending();
 
         Pageable pageable = PageRequest.of(page, size, sort);
@@ -67,23 +69,32 @@ public class AssetService {
                 .map(this::toResponse);
     }
 
-    // Find an asset by id or throw a ResourceNotFoundException which is
-    // handled globally by GlobalExceptionHandler.
     public AssetResponse getAssetById(String id) {
+        logger.info("Fetching asset by id={}", id);
+
         Asset asset = assetRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Asset " + id + " was not found"));
 
         return toResponse(asset);
     }
 
-    // Create a new asset from the request DTO. Demonstrates simple mapping
-    // from request -> response DTO and updating the in-memory store.
     public AssetResponse createAsset(CreateAssetRequest request) {
+        String assetTag = request.getAssetTag().trim();
+        String serialNumber = request.getSerialNumber().trim();
+
+        if (assetRepository.existsByAssetTag(assetTag)) {
+            throw new DuplicateResourceException("Asset tag already exists: " + assetTag);
+        }
+
+        if (assetRepository.existsBySerialNumber(serialNumber)) {
+            throw new DuplicateResourceException("Serial number already exists: " + serialNumber);
+        }
+
         Asset asset = new Asset(
-                request.getAssetTag().trim(),
+                assetTag,
                 request.getName().trim(),
                 request.getCategory().trim(),
-                request.getSerialNumber().trim(),
+                serialNumber,
                 "AVAILABLE",
                 request.getLocation().trim(),
                 null
@@ -94,11 +105,9 @@ public class AssetService {
     }
 
     private boolean hasValue(String value) {
-        return value != null && !value.trim().isBlank();
+        return value != null && !value.isBlank();
     }
 
-
-    // Helper to convert an Asset to an AssetResponse DTO.
     private AssetResponse toResponse(Asset asset) {
         return new AssetResponse(
                 asset.getId(),

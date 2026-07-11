@@ -1,0 +1,30 @@
+Databases:
+1. Relational       SQL
+2. Non relational   NoSQL: Not SQL/ Not Only SQL
+    Any DB that does not use tables
+    Key Value pairs: assetTag: 'LAP-2026-4721'
+    Graph: MYself ---> My students 
+    DOCUMENT databases: 
+
+General mongosh syntax:
+db.collection_name.command(args)
+
+
+
+GET /api/assets?status=AVAILABLE
+
+Controller receives:
+status = "AVAILABLE"
+category = null
+location = null
+
+Services does:
+assetRepository.findBy...("AVAILABLE")
+
+Controller collect query params from URL
+
+Service checks which params were provided
+
+Repo perform db search
+
+Spring Data MongoDB 

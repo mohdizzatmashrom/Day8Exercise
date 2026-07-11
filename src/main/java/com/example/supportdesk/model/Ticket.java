@@ -1,6 +1,7 @@
 package com.example.supportdesk.model;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
@@ -13,10 +14,15 @@ public class Ticket {
 
     private String title;
     private String description;
+    @Indexed
     private String category;
+    @Indexed
     private String priority;
+    @Indexed
     private String status;
+    @Indexed
     private String createdBy;
+    @Indexed
     private LocalDateTime createdAt;
 
     public Ticket() {
