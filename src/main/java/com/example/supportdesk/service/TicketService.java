@@ -27,6 +27,26 @@ public class TicketService {
                 .toList();
     }
 
+    // Filter tickets by status, priority, or category (only one filter at a time)
+    // If all params are null, returns all tickets
+    public List<TicketResponse> getFilteredTickets(String status, String priority, String category) {
+        List<Ticket> tickets;
+
+        if (status != null) {
+            tickets = ticketRepository.findByStatus(status);
+        } else if (priority != null) {
+            tickets = ticketRepository.findByPriority(priority);
+        } else if (category != null) {
+            tickets = ticketRepository.findByCategory(category);
+        } else {
+            tickets = ticketRepository.findAll();
+        }
+
+        return tickets.stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
     // Return one ticket by ID from MongoDB, or throw 404
     public TicketResponse getTicketById(String id) {
         Ticket ticket = ticketRepository.findById(id)

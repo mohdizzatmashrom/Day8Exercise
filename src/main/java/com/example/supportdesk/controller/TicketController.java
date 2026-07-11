@@ -19,10 +19,13 @@ public class TicketController {
         this.ticketService = ticketService;
     }
 
-    // GET /api/tickets -> returns all tickets from MongoDB
+    // GET /api/tickets -> returns all tickets, optionally filtered by status, priority, or category
     @GetMapping
-    public List<TicketResponse> getAllTickets() {
-        return ticketService.getAllTickets();
+    public List<TicketResponse> getAllTickets(
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String priority,
+            @RequestParam(required = false) String category) {
+        return ticketService.getFilteredTickets(status, priority, category);
     }
 
     // GET /api/tickets/{id} -> returns a single ticket by id
