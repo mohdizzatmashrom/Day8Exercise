@@ -17,7 +17,10 @@ package com.example.assettracker;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication // Combines @Configuration, @EnableAutoConfiguration, @ComponentScan
+@SpringBootApplication(scanBasePackages = {
+        "com.example.assettracker",
+        "com.example.supportdesk"
+}) // Scans both assettracker and supportdesk packages
 public class AssetTrackerApplication {
 
     // The JVM starts here. SpringApplication.run boots the whole app.
