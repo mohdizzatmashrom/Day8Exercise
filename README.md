@@ -494,3 +494,11 @@ In a future version, I would make the following improvements to the API:
 
 **6. Add error messages for edge cases:** Provide meaningful error responses for common mistakes, such as invalid page numbers (negative values) or missing required parameters, so that API consumers can debug their requests easily.
 
+
+
+### Summary Paragraph: What I Would Improve in the API
+
+
+
+I would add input validation for filter values (status, priority, category) to return 400 errors for invalid inputs, support combined filters using AND logic instead of the current if-else-if chain, cap maximum page size to 50, validate sort fields against a whitelist, use a stable DTO wrapper for paginated responses, and add clear error messages for edge cases.
+
