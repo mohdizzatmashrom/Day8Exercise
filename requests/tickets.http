@@ -117,3 +117,25 @@ Content-Type: application/json
   "priority": "",
   "createdBy": ""
 }
+
+### ========================================
+### EXERCISE 05 - Unusual Query Behaviour Tests
+### ========================================
+
+### Test 1: Invalid Status Value
+GET http://localhost:8080/api/tickets?status=INVALID
+
+### Test 2: Invalid Priority Value
+GET http://localhost:8080/api/tickets?priority=URGENT
+
+### Test 3: Page Number with No Records
+GET http://localhost:8080/api/tickets/paged?page=99&size=5
+
+### Test 4: Very Large Page Size
+GET http://localhost:8080/api/tickets/paged?page=0&size=100
+
+### Test 5: Unknown Sort Field
+GET http://localhost:8080/api/tickets/paged?page=0&size=5&sortBy=unknownField&direction=asc
+
+### Test 6: Combined Filters
+GET http://localhost:8080/api/tickets?status=OPEN&priority=HIGH
