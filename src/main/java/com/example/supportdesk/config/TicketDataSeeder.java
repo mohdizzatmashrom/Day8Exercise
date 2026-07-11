@@ -15,15 +15,15 @@ public class TicketDataSeeder {
     CommandLineRunner seedTickets(TicketRepository ticketRepository) {
         return args -> {
             if (ticketRepository.count() > 0) {
-                return;
+                ticketRepository.deleteAll();
             }
 
             ticketRepository.save(new Ticket(
                     "Login page not loading",
                     "Users report the login page shows a blank screen on Chrome.",
                     "Bug",
-                    "High",
-                    "Open",
+                    "HIGH",
+                    "OPEN",
                     "ali@example.com",
                     LocalDateTime.now().minusDays(3)
             ));
@@ -33,7 +33,7 @@ public class TicketDataSeeder {
                     "Request to add dark mode theme for the dashboard.",
                     "Feature Request",
                     "Medium",
-                    "Open",
+                    "OPEN",
                     "sit@example.com",
                     LocalDateTime.now().minusDays(1)
             ));
@@ -46,6 +46,46 @@ public class TicketDataSeeder {
                     "Closed",
                     "mutu@example.com",
                     LocalDateTime.now().minusDays(7)
+            ));
+
+            ticketRepository.save(new Ticket(
+                    "Email server down",
+                    "Outgoing emails are bouncing with SMTP timeout error.",
+                    "Email",
+                    "HIGH",
+                    "OPEN",
+                    "admin@example.com",
+                    LocalDateTime.now().minusDays(2)
+            ));
+
+            ticketRepository.save(new Ticket(
+                    "Email notifications not sent",
+                    "Password reset emails are not being delivered.",
+                    "Email",
+                    "HIGH",
+                    "OPEN",
+                    "support@example.com",
+                    LocalDateTime.now().minusHours(12)
+            ));
+
+            ticketRepository.save(new Ticket(
+                    "Slow dashboard loading",
+                    "Dashboard takes over 10 seconds to load with large datasets.",
+                    "Bug",
+                    "Medium",
+                    "OPEN",
+                    "bob@example.com",
+                    LocalDateTime.now().minusDays(5)
+            ));
+
+            ticketRepository.save(new Ticket(
+                    "Add export to CSV",
+                    "Users need to export ticket data to CSV format.",
+                    "Feature Request",
+                    "Low",
+                    "OPEN",
+                    "carol@example.com",
+                    LocalDateTime.now().minusDays(4)
             ));
         };
     }

@@ -110,3 +110,103 @@ Participants may use AI tools to:
 
 Participants must always review, verify, test, and understand any AI-generated output. No passwords, API keys, tokens, private keys, or confidential data should be placed into AI prompts.
 
+
+
+---
+
+
+
+## Day 8 Exercise 04 - Short Notes
+
+
+
+### 1. Which query parameters did you implement?
+
+
+
+Three filter parameters on `GET /api/tickets`:
+- `status` – filter tickets by status (e.g. OPEN, Closed)
+- `priority` – filter tickets by priority (e.g. HIGH, Medium, Low)
+- `category` – filter tickets by category (e.g. Email, Bug, Network)
+
+
+
+Four pagination/sorting parameters on `GET /api/tickets/paged`:
+- `page` – the page number (default 0)
+- `size` – the number of items per page (default 5)
+- `sortBy` – the field to sort by (default `createdAt`)
+- `direction` – sort direction, `asc` or `desc` (default `desc`)
+
+
+
+### 2. Which fields did you index?
+
+
+
+Five fields are indexed in the `Ticket` model using `@Indexed`:
+- `category`
+- `priority`
+- `status`
+- `createdBy`
+- `createdAt`
+
+
+
+These are the fields most commonly used in filter and sort operations, so indexing them improves query performance.
+
+
+
+### 3. Why should an API use pagination?
+
+
+
+- **Performance** – Returning all records at once can be slow and consume a lot of memory, especially with large datasets. Pagination returns only a small subset per request.
+
+- **Scalability** – Smaller responses reduce bandwidth and server load, allowing the API to handle more concurrent users.
+
+- **User experience** – Clients can display data in manageable chunks (pages) instead of overwhelming the user with thousands of results.
+
+- **Predictable response times** – Each page has a bounded number of items, so response times stay consistent as the dataset grows.
+
+
+
+### 4. What log messages appear when you call the filtering endpoint?
+
+
+
+When calling `GET /api/tickets?status=OPEN`, the following log message appears:
+
+
+
+```
+INFO  c.e.s.service.TicketService - Fetching tickets with filters - status: OPEN, priority: null, category: null
+```
+
+
+
+When calling the paged endpoint `GET /api/tickets/paged?page=0&size=5`, this log appears:
+
+
+
+```
+INFO  c.e.s.service.TicketService - Fetching paginated tickets - page: 0, size: 5, sort: createdAt: DESC
+```
+
+
+
+### 5. What endpoint proves your sorting works?
+
+
+
+The endpoint that proves sorting works:
+
+
+
+```
+GET /api/tickets/paged?page=0&size=5&sortBy=createdAt&direction=desc
+```
+
+
+
+This returns tickets sorted by `createdAt` in descending order (newest first). You can compare the `createdAt` values in the response to confirm they are ordered from newest to oldest. Changing `direction=asc` reverses the order, further proving sorting is functional.
+

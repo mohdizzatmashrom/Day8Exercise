@@ -1,16 +1,33 @@
 ### ========================================
-### GET - All tickets (no filter)
+### EXERCISE 04 - Required Query Tests
 ### ========================================
+
+### 1. Get all tickets (no filter)
 GET http://localhost:8080/api/tickets
 
-### ========================================
-### GET - Filter by status = Open
-### ========================================
-GET http://localhost:8080/api/tickets?status=Open
+### 2. Filter by status = OPEN
+GET http://localhost:8080/api/tickets?status=OPEN
+
+### 3. Filter by priority = HIGH
+GET http://localhost:8080/api/tickets?priority=HIGH
+
+### 4. Filter by category = Email
+GET http://localhost:8080/api/tickets?category=Email
+
+### 5. Paged tickets - first page
+GET http://localhost:8080/api/tickets/paged?page=0&size=5
+
+### 6. Paged tickets - second page
+GET http://localhost:8080/api/tickets/paged?page=1&size=5
+
+### 7. Paged tickets sorted by createdAt descending
+GET http://localhost:8080/api/tickets/paged?page=0&size=5&sortBy=createdAt&direction=desc
 
 ### ========================================
-### GET - Filter by status = Closed
+### Additional Filter Tests
 ### ========================================
+
+### GET - Filter by status = Closed
 GET http://localhost:8080/api/tickets?status=Closed
 
 ### ========================================
