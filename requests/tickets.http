@@ -1,22 +1,61 @@
-### Get all tickets (no filter)
+### ========================================
+### GET - All tickets (no filter)
+### ========================================
 GET http://localhost:8080/api/tickets
 
-### Filter tickets by status = OPEN
-GET http://localhost:8080/api/tickets?status=OPEN
+### ========================================
+### GET - Filter by status = Open
+### ========================================
+GET http://localhost:8080/api/tickets?status=Open
 
-### Filter tickets by priority = HIGH
-GET http://localhost:8080/api/tickets?priority=HIGH
+### ========================================
+### GET - Filter by status = Closed
+### ========================================
+GET http://localhost:8080/api/tickets?status=Closed
 
-### Filter tickets by category = Email
-GET http://localhost:8080/api/tickets?category=Email
+### ========================================
+### GET - Filter by priority = High
+### ========================================
+GET http://localhost:8080/api/tickets?priority=High
 
-### Get one ticket by ID (replace with real ID from GET /api/tickets)
+### ========================================
+### GET - Filter by priority = Medium
+### ========================================
+GET http://localhost:8080/api/tickets?priority=Medium
+
+### ========================================
+### GET - Filter by priority = Low
+### ========================================
+GET http://localhost:8080/api/tickets?priority=Low
+
+### ========================================
+### GET - Filter by category = Bug
+### ========================================
+GET http://localhost:8080/api/tickets?category=Bug
+
+### ========================================
+### GET - Filter by category = Feature Request
+### ========================================
+GET http://localhost:8080/api/tickets?category=Feature%20Request
+
+### ========================================
+### GET - Filter by category = Documentation
+### ========================================
+GET http://localhost:8080/api/tickets?category=Documentation
+
+### ========================================
+### GET - One ticket by ID (replace with real ID from GET /api/tickets above)
+### ========================================
 GET http://localhost:8080/api/tickets/REPLACE_WITH_REAL_ID
 
-### Get a missing ticket (should return 404)
+### ========================================
+### GET - Missing ticket (should return 404)
+### ========================================
 GET http://localhost:8080/api/tickets/000000000000000000000000
 
-### Create a new ticket
+### ========================================
+### POST - Create a valid ticket
+### ========================================
 POST http://localhost:8080/api/tickets
 Content-Type: application/json
 
@@ -24,11 +63,13 @@ Content-Type: application/json
   "title": "Cannot connect to VPN",
   "description": "VPN connection fails with timeout error",
   "category": "Network",
-  "priority": "HIGH",
+  "priority": "High",
   "createdBy": "alice@example.com"
 }
 
-### Create an invalid ticket (missing required fields)
+### ========================================
+### POST - Create an invalid ticket (empty fields - should return 400)
+### ========================================
 POST http://localhost:8080/api/tickets
 Content-Type: application/json
 
